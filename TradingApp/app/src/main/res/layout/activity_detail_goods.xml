@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_buy_goods"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.edward.tradingapp.DetailGoodsActivity">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_above="@+id/goodQuantityLabel"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="32dp"
+        android:id="@+id/goodNameInput" />
+
+    <TextView
+        android:text="Price : "
+        android:layout_height="wrap_content"
+        android:id="@+id/goodPriceLabel"
+        android:layout_width="100dp"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/goodNameLabel"
+        android:layout_alignStart="@+id/goodNameLabel" />
+
+    <TextView
+        android:text="Name : "
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:id="@+id/goodNameLabel"
+        android:layout_width="100dp"
+        android:layout_marginTop="68dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Quantity : "
+        android:layout_height="wrap_content"
+        android:id="@+id/goodQuantityLabel"
+        android:layout_width="100dp"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/goodPriceLabel"
+        android:layout_alignStart="@+id/goodPriceLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/goodQunatityInput"
+        android:layout_below="@+id/goodPriceInput"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/goodPriceInput"
+        android:layout_alignBaseline="@+id/goodPriceLabel"
+        android:layout_alignBottom="@+id/goodPriceLabel"
+        android:layout_alignParentEnd="true"
+        android:inputType="number" />
+
+    <Button
+        android:text="Submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:id="@+id/btnSubmit"
+        android:layout_below="@+id/goodQunatityInput"
+        android:layout_toEndOf="@+id/goodQuantityLabel"
+        android:onClick="Submit"/>
+</RelativeLayout>
