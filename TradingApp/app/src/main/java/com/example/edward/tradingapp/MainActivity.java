@@ -10,7 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.edward.tradingapp.Models.Good;
+import com.example.edward.tradingapp.Repositories.GoodsSPRepository;
+import com.example.edward.tradingapp.Repositories.LocalDBHandler;
 import com.example.edward.tradingapp.Services.GetGoodsService;
+import com.example.edward.tradingapp.Services.SellGoodsService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +25,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
 {
     private ListView listView;
+    private ListView transactionsListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,6 +36,9 @@ public class MainActivity extends AppCompatActivity
         Log.i("MainActivity","Main Activity created");
 
         listView = (ListView) findViewById(R.id.goodsList);
+        transactionsListView = (ListView) findViewById(R.id.transactionsList);
+
+        PopulateTransactions();
 
         GetGoodsService getGoods = new GetGoodsService(){
             @Override
@@ -49,6 +56,7 @@ public class MainActivity extends AppCompatActivity
 
                     PopulateList(goodsList);
 
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -57,6 +65,7 @@ public class MainActivity extends AppCompatActivity
 
         getGoods.execute();
 
+        SellLocal();
 
     }
 
@@ -90,6 +99,7 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("Quantity",goodsList.get(i).getQuantity());
                 intent.putExtra("Updated",goodsList.get(i).getUpdated());
                 intent.putExtra("IsBuy",true);
+                intent.putExtra("Transaction",false);
 
                 startActivity(intent);
             }
@@ -97,14 +107,83 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void PopulateTransactions()
+    {
+
+
+        GoodsSPRepository repo = new GoodsSPRepository(MainActivity.this);
+        List<String> goodsName = new ArrayList<String>();
+
+        final List<Good> goodsList = new ArrayList<>(repo.getGoodsList());
+
+        for (Good good : goodsList) {
+            goodsName.add(good.getName());
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                goodsName);
+
+        transactionsListView.setAdapter(arrayAdapter);
+
+        transactionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                Intent intent = new Intent(MainActivity.this,DetailGoodsActivity.class);
+
+                intent.putExtra("Id", goodsList.get(i).getId());
+                intent.putExtra("Name", goodsList.get(i).getName());
+                intent.putExtra("Price", goodsList.get(i).getPrice());
+                intent.putExtra("Quantity",goodsList.get(i).getQuantity());
+                intent.putExtra("Updated",goodsList.get(i).getUpdated());
+                intent.putExtra("Transaction",true);
+
+                startActivity(intent);
+            }
+
+        });
+
+    }
+
     public void GoToSellGood(View view)
     {
         Intent intent = new Intent(MainActivity.this,DetailGoodsActivity.class);
 
         intent.putExtra("IsBuy",false);
+        intent.putExtra("Transaction",false);
 
         startActivity(intent);
     }
+
+    public void SellLocal()
+    {
+        final LocalDBHandler repo = new LocalDBHandler(this,null,null,1);
+
+        List<Good> goodsToSell = new ArrayList<>(repo.GetGoods());
+
+        for (Good good: goodsToSell)
+        {
+            SellGoodsService sellGoods = new SellGoodsService(good)
+            {
+                @Override
+                protected void onPostExecute(Object o)
+                {
+                    repo.DeleteAll();
+                }
+            };
+            sellGoods.execute();
+        }
+
+    }
+
+    public void SellLocalBtn(View view)
+    {
+        SellLocal();
+    }
+
 
     @Override
     protected void onDestroy()

@@ -89,7 +89,7 @@ public class LocalDBHandler extends SQLiteOpenHelper
     {
         ContentValues values = new ContentValues();
 
-        values.put(COLUMN_ID,id);
+        //values.put(COLUMN_ID,id);
         values.put(COLUMN_NAME,name);
         values.put(COLUMN_QUANTITY,quantity);
         values.put(COLUMN_PRICE,price);
@@ -111,6 +111,12 @@ public class LocalDBHandler extends SQLiteOpenHelper
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM  " + TABLE_Goods + " WHERE " + COLUMN_ID + "=" + id + ";");
 
+    }
+
+    public void DeleteAll()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM  " + TABLE_Goods);
     }
 
     public void UpdateGoodById(int id,String name,int quantity,int price,int updated)

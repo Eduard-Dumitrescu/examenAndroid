@@ -24,11 +24,14 @@ public class GoodsSPRepository
 
     public GoodsSPRepository() {}
 
-    public GoodsSPRepository(Context context, List<Good> goodsList, String jsonString)
+
+
+    public GoodsSPRepository(Context context)
     {
         this.context = context;
-        this.goodsList = goodsList;
-        this.jsonString = jsonString;
+        SetGoods();
+        SetJSONString();
+
     }
 
     public String getJsonString() {
@@ -55,16 +58,27 @@ public class GoodsSPRepository
         this.context = context;
     }
 
-    private Boolean isCached()
+    public Boolean isCached()
     {
         SharedPreferences pref = this.context.getApplicationContext().getSharedPreferences("GoodsList", context.MODE_PRIVATE);
 
         return pref.contains("goodsListJSON") ? true : false;
     }
 
-    private List<Good> GetGoods()
+    public void SetJSONString()
+    {
+        SharedPreferences pref = this.context.getSharedPreferences("GoodsList", this.context.MODE_PRIVATE);
+
+        this.jsonString = pref.getString("goodsListJSON","");
+
+    }
+
+    public void SetGoods()
     {
         this.goodsList = new ArrayList<Good>();
+        SetJSONString();
+        if(!getJsonString().isEmpty())
+        {
         try {
             JSONArray jsonArr = new JSONArray(this.getJsonString());
 
@@ -77,9 +91,49 @@ public class GoodsSPRepository
         {
             e.printStackTrace();
         }
-
-        return this.goodsList;
+        }
     }
+
+    public void SavePreference()
+    {
+        SharedPreferences pref = this.context.getSharedPreferences("GoodsList", this.context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        editor.putString("goodsListJSON", this.getJsonString());
+
+
+        editor.commit();
+
+    }
+
+    public void AddGood(Good givenGood) throws JSONException
+    {
+        SetJSONString();
+        SetGoods();
+
+        this.goodsList.add(givenGood);
+        JSONArray arr = new JSONArray();
+
+        for (Good good: this.goodsList)
+        {
+            JSONObject msg = new JSONObject();
+
+            msg.put("id",good.getId());
+            msg.put("name",good.getName());
+            msg.put("quantity",good.getQuantity());
+            msg.put("price",good.getPrice());
+            msg.put("updated",good.getUpdated());
+
+
+           arr.put(msg);
+        }
+
+        setJsonString(arr.toString());
+
+        SavePreference();
+
+    }
+
 
 
 

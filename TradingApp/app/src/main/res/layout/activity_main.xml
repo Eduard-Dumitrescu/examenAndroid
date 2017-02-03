@@ -10,21 +10,59 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.edward.tradingapp.MainActivity">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/goodsList"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="127dp" />
-
     <Button
         android:text="Sell"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="29dp"
-        android:id="@+id/btnSell"
-        android:layout_alignParentBottom="true"
+        android:id="@+id/button3"
+        android:onClick="GoToSellGood"
+        android:layout_below="@+id/transactionsList"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:text="Goods List"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:onClick="GoToSellGood"/>
+        android:textAlignment="center" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/goodsList"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:text="Transactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/goodsList"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp"
+        android:textAlignment="center" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_marginTop="11dp"
+        android:id="@+id/transactionsList"
+        android:layout_height="160dp"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Sell Local"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSellLocal"
+        android:onClick="SellLocalBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/button3"
+        android:textColor="@color/colorPrimaryDark" />
+
 </RelativeLayout>
